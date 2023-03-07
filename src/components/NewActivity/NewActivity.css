@@ -1,9 +1,9 @@
 .new-activity-wrapper {
     width: 80vw;
-    background-color: #555;
     padding: 0.5rem;
-    border: 1px solid white;
-    border-radius: 10px;
+    border-radius: 15px;
+    border-width: 3px;
+    border-style: solid;
 }
 
 textarea {
@@ -17,7 +17,8 @@ textarea {
 }
 
 hr {
-    margin: 0;
+    margin: 0 0 0.4rem 0;
+    /* margin-bottom: 0.5rem; */
 }
 
 .new-activity-title {
@@ -26,9 +27,8 @@ hr {
 
 .new-activity-desc {
     font-size: 1.5rem;
-    /* min-height: 5rem; */
 }
 
 textarea::placeholder {
-    color: #BBB;
+    color: #E5E5E5;
 }

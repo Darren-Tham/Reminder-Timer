@@ -1,8 +1,25 @@
 // React
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
+
+// Helper
+import Activity from '../../helper/ActivityEnum'
 
 // Style
 import './NewActivity.css'
+
+interface ActivityProps {
+    activity: Activity
+    lightColor: string
+    darkColor: string
+    borderColor: string
+}
+
+const taskProps: ActivityProps = {
+    activity: Activity.TASK,
+    lightColor: '#2a88fa',
+    darkColor: '#167bf5',
+    borderColor: '#1176f0'
+}
 
 /**
  * React component that creates a new activity
@@ -11,6 +28,7 @@ import './NewActivity.css'
  * @returns NewActivity component
  */
 export default function NewAcitivty() {
+    const [activityProps, setActivityProps] = useState(taskProps)
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const descRef = useRef<HTMLTextAreaElement>(null)
 
@@ -25,9 +43,14 @@ export default function NewAcitivty() {
         textarea.style.height = `${textarea.scrollHeight}px`
     }
 
+    const { lightColor, darkColor, borderColor } = activityProps
     return (
         <div
             className='new-activity-wrapper'
+            style={{
+                background: `linear-gradient(to right bottom, ${lightColor} 50%, ${darkColor})`,
+                borderColor
+            }}
         >
             <textarea
                 className='new-activity-title'
