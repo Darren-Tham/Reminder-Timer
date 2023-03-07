@@ -17,7 +17,7 @@ export default function NewAcitivty() {
     /**
      * Resizes the textarea when a newline is added.
      *
-     * @param e TextArea Event
+     * @param e textarea event
      */
     function handleInputResize(e: React.FormEvent<HTMLTextAreaElement>) {
         const textarea = e.currentTarget
@@ -31,6 +31,7 @@ export default function NewAcitivty() {
         >
             <textarea
                 className='new-activity-title'
+                rows={1}
                 ref={titleRef}
                 onInput={handleInputResize}
                 placeholder='Title'
@@ -38,6 +39,7 @@ export default function NewAcitivty() {
             <hr />
             <textarea
                 className='new-activity-desc'
+                rows={3}
                 ref={descRef}
                 onInput={handleInputResize}
                 placeholder='Optional description'
