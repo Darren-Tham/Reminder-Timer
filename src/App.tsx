@@ -1,12 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
-function App() {
+export default function App() {
     return (
-        <div>
-            Pog
-        </div>
+        <h1>Reminder Timer</h1>
     )
 }
-
-export default App
