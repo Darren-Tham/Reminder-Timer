@@ -46,7 +46,7 @@ export default function NewAcitivty() {
     const { lightColor, darkColor, borderColor } = activityProps
     return (
         <div
-            className='new-activity-wrapper'
+            className='new-activity-container'
             style={{
                 background: `linear-gradient(to right bottom, ${lightColor} 50%, ${darkColor})`,
                 borderColor
@@ -62,11 +62,16 @@ export default function NewAcitivty() {
             <hr />
             <textarea
                 className='new-activity-desc'
-                rows={3}
+                rows={2}
                 ref={descRef}
                 onInput={handleInputResize}
                 placeholder='Optional description'
             />
+            <hr />
+            <button
+                className="material-symbols-outlined
+                           new-activity-calendar-icon"
+            >edit_calendar</button>
         </div>
     )
 }

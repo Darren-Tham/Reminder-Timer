@@ -1,5 +1,6 @@
 // Components
 import NewActivity from './components/NewActivity/NewActivity'
+import Calendar from './components/Calendar/Calendar'
 
 // Style
 import './App.css'
@@ -14,6 +15,7 @@ export default function App() {
         <>
             <h1>Reminder Timer</h1>
             <NewActivity />
+            <Calendar />
         </>
     )
 }

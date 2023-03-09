@@ -1,4 +1,4 @@
-.new-activity-wrapper {
+.new-activity-container {
     width: 80vw;
     padding: 0.5rem;
     border-radius: 15px;
@@ -18,7 +18,6 @@ textarea {
 
 hr {
     margin: 0 0 0.4rem 0;
-    /* margin-bottom: 0.5rem; */
 }
 
 .new-activity-title {
@@ -31,4 +30,15 @@ hr {
 
 textarea::placeholder {
     color: #E5E5E5;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    padding: 0;
+}
+
+.new-activity-calendar-icon {
+    font-size: 2.25rem;
 }
