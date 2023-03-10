@@ -36,6 +36,19 @@
     opacity: 0.5;
 }
 
+/* Calendar Button */
 .new-activity-container button {
     font-size: 2.25rem;
+}
+
+/* Date Container */
+.new-activity-container div:last-child {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Date Text */
+.new-activity-container span {
+    font-size: 1.4rem;
 }

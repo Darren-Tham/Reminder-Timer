@@ -29,8 +29,19 @@ const taskProps: ActivityProps = {
  */
 export default function NewAcitivty() {
     const [activityProps, setActivityProps] = useState(taskProps)
+    const [date, setDate] = useState(new Date(Date.now()))
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const descRef = useRef<HTMLTextAreaElement>(null)
+
+    const { lightColor, darkColor, borderColor } = activityProps
+
+    const options: Intl.DateTimeFormatOptions = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
 
     /**
      * Resizes the textarea when a newline is added.
@@ -43,7 +54,6 @@ export default function NewAcitivty() {
         textarea.style.height = `${textarea.scrollHeight}px`
     }
 
-    const { lightColor, darkColor, borderColor } = activityProps
     return (
         <div
             className='new-activity-container'
@@ -66,6 +76,10 @@ export default function NewAcitivty() {
                 placeholder='Optional description'
             />
             <hr />
-            <button className='material-symbols-outlined'>edit_calendar</button> </div>
+            <div>
+                <button className='material-symbols-outlined'>edit_calendar</button>
+                <span>{formattedDate}</span>
+            </div>
+        </div>
     )
 }
