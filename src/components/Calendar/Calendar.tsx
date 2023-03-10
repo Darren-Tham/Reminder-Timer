@@ -1,8 +1,35 @@
 // React
-import { useState } from 'react'
+import { useState, useReducer } from 'react'
 
 // Style
 import './Calendar.css'
+
+interface State {
+    date: Date
+}
+
+type Action = { type: 'next' | 'back' }
+
+/**
+ * ADD COMMENT
+ * @param state
+ * @param action
+ * @returns
+ */
+function reducer(state: State, action: Action): State {
+    const newDate = new Date(state.date)
+    switch (action.type) {
+        case 'next':
+            newDate.setMonth(newDate.getMonth() + 1)
+            break
+        case 'back':
+            newDate.setMonth(newDate.getMonth() - 1)
+            break
+        default:
+            throw 'Unsupported Action'
+    }
+    return { date: newDate }
+}
 
 /**
  * React component for
@@ -11,7 +38,9 @@ import './Calendar.css'
  * @returns Calendar component
  */
 export default function Calendar() {
-    const [date, setDate] = useState(new Date(Date.now()))
+    // const [date, setDate] = useState(new Date(Date.now()))
+    const [state, dispatch] = useReducer(reducer, { date: new Date(Date.now()) })
+    const { date } = state
 
     /**
      * Renders the 7 days of the week.
@@ -68,12 +97,18 @@ export default function Calendar() {
     return (
         <div className='calendar-container'>
             <div>
-                <button className='material-symbols-outlined'>arrow_left</button>
+                <button
+                    className='material-symbols-outlined'
+                    onClick={() => dispatch({ type: 'back' })}
+                >arrow_left</button>
                 <div>
                     <span>{currMonth}</span>
                     <span>{currYear}</span>
                 </div>
-                <button className='material-symbols-outlined'>arrow_right</button>
+                <button
+                    className='material-symbols-outlined'
+                    onClick={() => dispatch({ type: 'next' })}
+                >arrow_right</button>
             </div>
             <table>
                 <thead>
