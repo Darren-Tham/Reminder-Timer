@@ -1,8 +1,61 @@
-.calendar-header {
-    display: flex;
+.calendar-container {
+    --container-width: 400px;
+    width: var(--container-width);
+    background-color: #222227;
 }
 
-.calendar-left-icon {
-    font-size: 5rem;
-    background-color: blue;
+/* Header */
+.calendar-container > div {
+    display: flex;
+    justify-content: space-between;
+    background-color: #1194f1;
+}
+
+/* Arrow Icons */
+.calendar-container button {
+    font-size: 3rem;
+    transition: background-color 0.25s;
+}
+
+/* Arrow Icons Hover */
+.calendar-container button:hover {
+    background-color: #37abff;
+}
+
+/* Month and Year Header */
+.calendar-container > div > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0;
+}
+
+/* Month Span */
+.calendar-container span:first-child {
+    font-size: 2rem;
+}
+
+/* Year Span */
+.calendar-container span:last-child {
+    font-size: 1.2rem;
+}
+
+/* Table */
+.calendar-container table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Days of the Week */
+.calendar-container th {
+    padding: 1rem;
+}
+
+/* Dates in the Month */
+.calendar-container td {
+    height: calc(var(--container-width) / 7);
+    text-align: center;
+    font-size: 0.9rem;
 }
