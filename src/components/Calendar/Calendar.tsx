@@ -1,20 +1,29 @@
 // React
-import { useState, useReducer } from 'react'
+import { useReducer } from 'react'
 
 // Style
 import './Calendar.css'
 
+/**
+ * An object that keeps track of the state of the Date.
+ */
 interface State {
     date: Date
 }
 
+/**
+ * Types of action to perform on the Date.
+ */
 type Action = { type: 'next' | 'back' }
 
 /**
- * ADD COMMENT
- * @param state
- * @param action
- * @returns
+ * Reducer function for useReducer to change
+ * the Date in the Calendar component.
+ *
+ * @param state current Date
+ * @param action type of action to perform on the Date
+ * @returns a new Date
+ * @throws an Error for unsupported action types
  */
 function reducer(state: State, action: Action): State {
     const newDate = new Date(state.date)
@@ -41,6 +50,14 @@ export default function Calendar() {
     // const [date, setDate] = useState(new Date(Date.now()))
     const [state, dispatch] = useReducer(reducer, { date: new Date(Date.now()) })
     const { date } = state
+    const options: Intl.DateTimeFormatOptions = {
+        month: 'long',
+        year: 'numeric'
+    }
+    const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date)
+    const currMonth = parts[0].value
+    const currYear = parts[2].value
+
 
     /**
      * Renders the 7 days of the week.
@@ -52,7 +69,11 @@ export default function Calendar() {
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
         return (
             <tr>
-                {days.map(day => <th key={day}>{day}</th>)}
+                {days.map((day, i) => (
+                    <th
+                        key={day}
+                    >{day}</th>
+                ))}
             </tr>
         )
     }
@@ -75,6 +96,7 @@ export default function Calendar() {
                     const td = (
                         <td
                             key={`${temp.getMonth()}-${temp.getDate()}`}
+                            className={dateEquals(temp, date) ? 'calendar-curr-date' : undefined}
                             // Dim dates on previous and next months
                             style={temp.getMonth() == currMonth ? undefined : { opacity: 0.5 }}
                         >{temp.getDate()}</td>
@@ -85,14 +107,6 @@ export default function Calendar() {
             </tr>
         ))
     }
-
-    const options: Intl.DateTimeFormatOptions = {
-        month: 'long',
-        year: 'numeric'
-    }
-    const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date)
-    const currMonth = parts[0].value
-    const currYear = parts[2].value
 
     return (
         <div className='calendar-container'>
@@ -119,5 +133,24 @@ export default function Calendar() {
                 </tbody>
             </table>
         </div>
+    )
+}
+
+/**
+ * Returns true if two dates are equal.
+ *
+ * More specifically, returns true if two
+ * dates have the same year, month, and date.
+ *
+ * @param date1 first Date object to compare
+ * @param date2 second Date object to compare
+ * @returns a boolean value indicating whether
+ *          the two Date objects are equal
+ */
+function dateEquals(date1: Date, date2: Date) {
+    return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
     )
 }

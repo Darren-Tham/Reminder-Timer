@@ -8,6 +8,11 @@
 .calendar-container > div {
     display: flex;
     justify-content: space-between;
+}
+
+/* Background Color of Header and Current Date */
+.calendar-container > div,
+.calendar-curr-date {
     background-color: #1194f1;
 }
 
