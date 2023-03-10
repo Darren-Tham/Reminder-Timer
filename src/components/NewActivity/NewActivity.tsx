@@ -53,7 +53,6 @@ export default function NewAcitivty() {
             }}
         >
             <textarea
-                className='new-activity-title'
                 rows={1}
                 ref={titleRef}
                 onInput={handleInputResize}
@@ -61,17 +60,12 @@ export default function NewAcitivty() {
             />
             <hr />
             <textarea
-                className='new-activity-desc'
                 rows={2}
                 ref={descRef}
                 onInput={handleInputResize}
                 placeholder='Optional description'
             />
             <hr />
-            <button
-                className="material-symbols-outlined
-                           new-activity-calendar-icon"
-            >edit_calendar</button>
-        </div>
+            <button className='material-symbols-outlined'>edit_calendar</button> </div>
     )
 }

@@ -6,7 +6,13 @@
     border-style: solid;
 }
 
-textarea {
+/* Horizontal Line */
+.new-activity-container hr {
+    margin: 0 0 0.4rem 0;
+}
+
+/* Textarea */
+.new-activity-container textarea {
     width: 100%;
     resize: none;
     border: none;
@@ -14,32 +20,21 @@ textarea {
     padding: 0;
     overflow: hidden;
     background-color: inherit;
+    font-size: 1.5rem; /* Description Text Size */
 }
 
-hr {
-    margin: 0 0 0.4rem 0;
-}
-
-.new-activity-title {
+/* Title Textarea */
+/* Overwrites the font-size stated above */
+.new-activity-container textarea:first-child {
     font-size: 2rem;
 }
 
-.new-activity-desc {
-    font-size: 1.5rem;
-}
-
-textarea::placeholder {
+/* Textarea Placeholder */
+.new-activity-container textarea::placeholder {
     color: white;
     opacity: 0.5;
 }
 
-button {
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-    padding: 0;
-}
-
-.new-activity-calendar-icon {
+.new-activity-container button {
     font-size: 2.25rem;
 }

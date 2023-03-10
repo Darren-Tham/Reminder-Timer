@@ -68,12 +68,12 @@ export default function Calendar() {
     return (
         <div className='calendar-container'>
             <div>
-                <button className="material-symbols-outlined">arrow_left</button>
+                <button className='material-symbols-outlined'>arrow_left</button>
                 <div>
                     <span>{currMonth}</span>
                     <span>{currYear}</span>
                 </div>
-                <button className="material-symbols-outlined">arrow_right</button>
+                <button className='material-symbols-outlined'>arrow_right</button>
             </div>
             <table>
                 <thead>
