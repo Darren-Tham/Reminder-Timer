@@ -4,6 +4,12 @@ import { useState } from 'react'
 // Style
 import './Calendar.css'
 
+/**
+ * React component for
+ * the calendar popup.
+ *
+ * @returns Calendar component
+ */
 export default function Calendar() {
     const [date, setDate] = useState(new Date(Date.now()))
 
@@ -51,13 +57,21 @@ export default function Calendar() {
         ))
     }
 
+    const options: Intl.DateTimeFormatOptions = {
+        month: 'long',
+        year: 'numeric'
+    }
+    const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date)
+    const currMonth = parts[0].value
+    const currYear = parts[2].value
+
     return (
         <div className='calendar-container'>
             <div>
                 <button className="material-symbols-outlined">arrow_left</button>
                 <div>
-                    <span>Month</span>
-                    <span>Year</span>
+                    <span>{currMonth}</span>
+                    <span>{currYear}</span>
                 </div>
                 <button className="material-symbols-outlined">arrow_right</button>
             </div>

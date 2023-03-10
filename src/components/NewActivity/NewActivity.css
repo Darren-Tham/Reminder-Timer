@@ -29,7 +29,8 @@ hr {
 }
 
 textarea::placeholder {
-    color: #E5E5E5;
+    color: white;
+    opacity: 0.5;
 }
 
 button {

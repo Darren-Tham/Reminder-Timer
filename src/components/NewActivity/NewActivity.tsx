@@ -22,8 +22,8 @@ const taskProps: ActivityProps = {
 }
 
 /**
- * React component that creates a new activity
- * for the list.
+ * React component that creates
+ * a new activity for the list.
  *
  * @returns NewActivity component
  */
