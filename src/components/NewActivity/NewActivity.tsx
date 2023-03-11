@@ -1,5 +1,5 @@
 // React
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // Helper
 import Activity from '../../helper/ActivityEnum'
@@ -35,12 +35,22 @@ interface Props {
  * @returns NewActivity component
  */
 export default function NewAcitivty({ calendarContainerRef }: Props) {
+
     const [activityProps, setActivityProps] = useState(taskProps)
     const [date, setDate] = useState(new Date(Date.now()))
     const [toggleCalendar, setToggleCalendar] = useState(false)
+
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const descRef = useRef<HTMLTextAreaElement>(null)
     const newActivityContainerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        function hideCalendar(e: MouseEvent) {
+            if (e.target === calendarContainerElem) calendarContainerElem.style.removeProperty('display')
+        }
+        window.addEventListener('click', hideCalendar)
+        return () => { window.removeEventListener('click', hideCalendar) }
+    }, [])
 
     const { lightColor, darkColor, borderColor } = activityProps
 
