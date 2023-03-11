@@ -13,6 +13,7 @@ import './Calendar.css'
 interface Props {
     state: State
     dispatch: React.Dispatch<Action>
+    currDate: Date
 }
 
 /**
@@ -26,13 +27,13 @@ interface Props {
  * @param ref ref object passed by the parent
  * @returns Calendar component
  */
-export default forwardRef(function Calendar({ state, dispatch }: Props, ref: React.ForwardedRef<HTMLDivElement>) {
-    const { date } = state
+export default forwardRef(function Calendar({ state, dispatch, currDate }: Props, ref: React.ForwardedRef<HTMLDivElement>) {
+    const { displayDate } = state
     const options: Intl.DateTimeFormatOptions = {
         month: 'long',
         year: 'numeric'
     }
-    const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date)
+    const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(displayDate)
     const currMonth = parts[0].value
     const currYear = parts[2].value
 
@@ -63,7 +64,7 @@ export default forwardRef(function Calendar({ state, dispatch }: Props, ref: Rea
      *          table data cell elements representing dates
      */
     function renderDates() {
-        const temp = new Date(date)
+        const temp = new Date(displayDate)
         const currMonth = temp.getMonth()
         temp.setDate(1) // Find the first day of the month
         if (temp.getDay() !== 0) temp.setDate(1 - temp.getDay()) // Add date of previous months
@@ -73,7 +74,7 @@ export default forwardRef(function Calendar({ state, dispatch }: Props, ref: Rea
                     const td = (
                         <td
                             key={`${temp.getMonth()}-${temp.getDate()}`}
-                            className={dateEquals(temp, date) ? 'calendar-curr-date' : ''}
+                            className={dateEquals(temp, currDate) ? 'calendar-curr-date' : ''}
                             // Dim dates on previous and next months
                             style={temp.getMonth() == currMonth ? undefined : { opacity: 0.5 }}
                         >{temp.getDate()}</td>

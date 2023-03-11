@@ -26,10 +26,11 @@ const taskProps: ActivityProps = {
 }
 
 /**
- * An object that keeps track of the state of the Date.
+ * An object that keeps track of the state of the display Date.
  */
 export interface State {
-    date: Date
+    displayDate: Date
+    currDate: Date
 }
 
 /**
@@ -53,16 +54,28 @@ export type Action = { type: 'next' | 'back' | 'current' }
  * @throws an Error for unsupported action types
  */
 function reducer(state: State, action: Action): State {
-    const currDateObj = state.date
-    const currYear = currDateObj.getFullYear()
-    const currMonth = currDateObj.getMonth()
-    const currDate = currDateObj.getDate()
+    let displayDate = new Date()
+    const currDisplayDateObj = state.displayDate
+    const currDisplayYear = currDisplayDateObj.getFullYear()
+    const currDisplayMonth = currDisplayDateObj.getMonth()
+    const currDisplayDate = currDisplayDateObj.getDate()
     switch (action.type) {
-        case 'next': return { date: new Date(currYear, currMonth + 1, currDate) }
-        case 'back': return { date: new Date(currYear, currMonth - 1, currDate )}
-        case 'current': return { date: new Date(Date.now()) }
+        case 'next':
+            displayDate = new Date(currDisplayYear, currDisplayMonth + 1, currDisplayDate)
+            break
+        case 'back':
+            displayDate = new Date(currDisplayYear, currDisplayMonth - 1, currDisplayDate)
+            break
+        case 'current':
+            displayDate = new Date(state.currDate)
+            break
         default: throw Error('Unsupported Action')
     }
+
+    return ({
+        displayDate,
+        currDate: state.currDate
+    })
 }
 
 /**
@@ -74,9 +87,14 @@ function reducer(state: State, action: Action): State {
 export default function NewAcitivty() {
 
     const [activityProps, setActivityProps] = useState(taskProps)
-    const [date, setDate] = useState(new Date(Date.now()))
-    const [state, dispatch] = useReducer(reducer, { date: new Date(Date.now()) })
+    const [currDate, setCurrDate] = useState(new Date(Date.now()))
     const [toggleCalendar, setToggleCalendar] = useState(false)
+
+    const initState: State = {
+        displayDate: currDate,
+        currDate
+    }
+    const [state, dispatch] = useReducer(reducer, initState)
 
     /**
      * Used to set the positioning of the Calendar popup.
@@ -113,7 +131,7 @@ export default function NewAcitivty() {
         month: 'long',
         day: 'numeric'
     }
-    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date)
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(currDate)
 
     /**
      * Resizes the textarea when a newline is added.
@@ -189,6 +207,7 @@ export default function NewAcitivty() {
             <Calendar
                 state={state}
                 dispatch={dispatch}
+                currDate={currDate}
                 ref={calendarContainerRef}
             />
         </>
