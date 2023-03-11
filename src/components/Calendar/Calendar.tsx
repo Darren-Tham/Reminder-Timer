@@ -1,47 +1,18 @@
 // React
-import { useReducer, forwardRef } from 'react'
+import { forwardRef } from 'react'
+
+// Interface
+import { State, Action } from '../NewActivity/NewActivity'
 
 // Style
 import './Calendar.css'
 
 /**
- * An object that keeps track of the state of the Date.
+ * Props passed to the Calendar component.
  */
-interface State {
-    date: Date
-}
-
-/**
- * Types of action to perform on the Date.
- *
- * next - set date to the next month.
- *
- * back - set date to the previous month.
- *
- * current - set date to the current date.
- */
-type Action = { type: 'next' | 'back' | 'current' }
-
-/**
- * Reducer function for useReducer to change
- * the Date in the Calendar component.
- *
- * @param state current Date
- * @param action type of action to perform on the Date
- * @returns a new Date
- * @throws an Error for unsupported action types
- */
-function reducer(state: State, action: Action): State {
-    const currDateObj = state.date
-    const currYear = currDateObj.getFullYear()
-    const currMonth = currDateObj.getMonth()
-    const currDate = currDateObj.getDate()
-    switch (action.type) {
-        case 'next': return { date: new Date(currYear, currMonth + 1, currDate) }
-        case 'back': return { date: new Date(currYear, currMonth - 1, currDate )}
-        case 'current': return { date: new Date(Date.now()) }
-        default: throw Error('Unsupported Action')
-    }
+interface Props {
+    state: State
+    dispatch: React.Dispatch<Action>
 }
 
 /**
@@ -55,8 +26,7 @@ function reducer(state: State, action: Action): State {
  * @param ref ref object passed by the parent
  * @returns Calendar component
  */
-export default forwardRef(function Calendar(_, ref: React.ForwardedRef<HTMLDivElement>) {
-    const [state, dispatch] = useReducer(reducer, { date: new Date(Date.now()) })
+export default forwardRef(function Calendar({ state, dispatch }: Props, ref: React.ForwardedRef<HTMLDivElement>) {
     const { date } = state
     const options: Intl.DateTimeFormatOptions = {
         month: 'long',

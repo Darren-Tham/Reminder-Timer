@@ -1,5 +1,8 @@
 // React
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useReducer } from 'react'
+
+// Components
+import Calendar from '../Calendar/Calendar'
 
 // Helper
 import Activity from '../../helper/ActivityEnum'
@@ -23,10 +26,43 @@ const taskProps: ActivityProps = {
 }
 
 /**
- * Props passed to the NewActivity component.
+ * An object that keeps track of the state of the Date.
  */
-interface Props {
-    calendarContainerRef: React.MutableRefObject<HTMLDivElement | null>
+export interface State {
+    date: Date
+}
+
+/**
+ * Types of action to perform on the Date.
+ *
+ * next - set date to the next month.
+ *
+ * back - set date to the previous month.
+ *
+ * current - set date to the current date.
+ */
+export type Action = { type: 'next' | 'back' | 'current' }
+
+/**
+ * Reducer function for useReducer to change
+ * the Date in the Calendar component.
+ *
+ * @param state current Date
+ * @param action type of action to perform on the Date
+ * @returns a new Date
+ * @throws an Error for unsupported action types
+ */
+function reducer(state: State, action: Action): State {
+    const currDateObj = state.date
+    const currYear = currDateObj.getFullYear()
+    const currMonth = currDateObj.getMonth()
+    const currDate = currDateObj.getDate()
+    switch (action.type) {
+        case 'next': return { date: new Date(currYear, currMonth + 1, currDate) }
+        case 'back': return { date: new Date(currYear, currMonth - 1, currDate )}
+        case 'current': return { date: new Date(Date.now()) }
+        default: throw Error('Unsupported Action')
+    }
 }
 
 /**
@@ -35,17 +71,28 @@ interface Props {
  *
  * @returns NewActivity component
  */
-export default function NewAcitivty({ calendarContainerRef }: Props) {
+export default function NewAcitivty() {
 
     const [activityProps, setActivityProps] = useState(taskProps)
     const [date, setDate] = useState(new Date(Date.now()))
+    const [state, dispatch] = useReducer(reducer, { date: new Date(Date.now()) })
     const [toggleCalendar, setToggleCalendar] = useState(false)
 
-    const titleRef = useRef<HTMLTextAreaElement>(null)
-    const descRef = useRef<HTMLTextAreaElement>(null)
+    /**
+     * Used to set the positioning of the Calendar popup.
+     */
     const newActivityContainerRef = useRef<HTMLDivElement>(null)
-    const calendarIconRef = useRef<HTMLButtonElement>(null)
 
+    /**
+     * Used to set the display of the Calendar popup.
+     */
+    const calendarContainerRef = useRef<HTMLDivElement | null>(null)
+
+    /**
+     * Adds an event listener to the window object
+     * that allows the user to click outside the
+     * calendar to close it.
+     */
     useEffect(() => {
         function hideCalendar(e: MouseEvent) {
             const calendarContainerElem = getElem(calendarContainerRef)
@@ -79,6 +126,12 @@ export default function NewAcitivty({ calendarContainerRef }: Props) {
         textarea.style.height = `${textarea.scrollHeight}px`
     }
 
+    /**
+     * Toggles the Calendar popup whenever
+     * the Calendar icon is clicked.
+     *
+     * @param e mouse event
+     */
     function handleCalendarClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         e.stopPropagation()
         const calendarContainerElem = getElem(calendarContainerRef)
@@ -99,36 +152,40 @@ export default function NewAcitivty({ calendarContainerRef }: Props) {
     }
 
     return (
-        <div
-            className='new-activity-container'
-            ref={newActivityContainerRef}
-            style={{
-                background: `linear-gradient(to right bottom, ${lightColor} 50%, ${darkColor})`,
-                borderColor
-            }}
-        >
-            <textarea
-                rows={1}
-                ref={titleRef}
-                onInput={handleInputResize}
-                placeholder='Title'
-            />
-            <hr />
-            <textarea
-                rows={2}
-                ref={descRef}
-                onInput={handleInputResize}
-                placeholder='Optional description'
-            />
-            <hr />
-            <div>
-                <button
-                    className='material-symbols-outlined'
-                    ref={calendarIconRef}
-                    onClick={handleCalendarClick}
-                >edit_calendar</button>
-                <span>{formattedDate}</span>
+        <>
+            <div
+                className='new-activity-container'
+                ref={newActivityContainerRef}
+                style={{
+                    background: `linear-gradient(to right bottom, ${lightColor} 50%, ${darkColor})`,
+                    borderColor
+                }}
+            >
+                <textarea
+                    rows={1}
+                    onInput={handleInputResize}
+                    placeholder='Title'
+                />
+                <hr />
+                <textarea
+                    rows={2}
+                    onInput={handleInputResize}
+                    placeholder='Optional description'
+                />
+                <hr />
+                <div>
+                    <button
+                        className='material-symbols-outlined'
+                        onClick={handleCalendarClick}
+                    >edit_calendar</button>
+                    <span>{formattedDate}</span>
+                </div>
             </div>
-        </div>
+            <Calendar
+                state={state}
+                dispatch={dispatch}
+                ref={calendarContainerRef}
+            />
+        </>
     )
 }
