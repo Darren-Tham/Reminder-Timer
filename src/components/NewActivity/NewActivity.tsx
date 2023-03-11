@@ -97,7 +97,7 @@ export default function NewAcitivty() {
         function hideCalendar(e: MouseEvent) {
             const calendarContainerElem = getElem(calendarContainerRef)
             if (toggleCalendar && !calendarContainerElem.contains(e.target as Node)) {
-                calendarContainerElem.style.removeProperty('display')
+                toggleOff(calendarContainerElem)
                 setToggleCalendar(currToggleCalendar => !currToggleCalendar)
             }
         }
@@ -137,7 +137,7 @@ export default function NewAcitivty() {
         const calendarContainerElem = getElem(calendarContainerRef)
 
         if (toggleCalendar) {
-            calendarContainerElem.style.removeProperty('display')
+            toggleOff(calendarContainerElem)
         } else {
             const newActivityContainerElem = getElem(newActivityContainerRef)
             const newActivityContainerRect = newActivityContainerElem.getBoundingClientRect()
@@ -149,6 +149,11 @@ export default function NewAcitivty() {
         }
 
         setToggleCalendar(currToggleCalendar => !currToggleCalendar)
+    }
+
+    function toggleOff(calendarContainerElem: HTMLDivElement) {
+        calendarContainerElem.style.removeProperty('display')
+        dispatch({ type: 'current' })
     }
 
     return (
