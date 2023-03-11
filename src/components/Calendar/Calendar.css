@@ -12,20 +12,25 @@
     justify-content: space-between;
 }
 
-/* Background Color of Header and Current Date */
+/* Background Color of Header, Current Date, Date Button Hover */
 .calendar-container > div,
-.calendar-curr-date {
+.calendar-curr-date,
+.calendar-container td button:hover {
     background-color: #1194f1;
 }
 
 /* Arrow Icons */
-.calendar-container button {
+.calendar-container > div button {
     font-size: 3rem;
+}
+
+/* Background Color Transition for Arrow Buttons and Date Buttons */
+.calendar-container button {
     transition: background-color 0.25s;
 }
 
 /* Arrow Icons Hover */
-.calendar-container button:hover {
+.calendar-container > div button:hover {
     background-color: #37abff;
 }
 
@@ -65,4 +70,10 @@
     height: calc(var(--container-width) / 7);
     text-align: center;
     font-size: 0.9rem;
+    padding: 0;
+}
+
+.calendar-container td button {
+    width: 100%;
+    height: 100%;
 }

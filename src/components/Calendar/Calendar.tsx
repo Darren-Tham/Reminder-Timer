@@ -77,7 +77,9 @@ export default forwardRef(function Calendar({ state, dispatch, currDate }: Props
                             className={dateEquals(temp, currDate) ? 'calendar-curr-date' : ''}
                             // Dim dates on previous and next months
                             style={temp.getMonth() == currMonth ? undefined : { opacity: 0.5 }}
-                        >{temp.getDate()}</td>
+                        >
+                            <button>{temp.getDate()}</button>
+                        </td>
                     )
                     temp.setDate(temp.getDate() + 1)
                     return td
