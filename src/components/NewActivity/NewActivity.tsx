@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 
 // Helper
 import Activity from '../../helper/ActivityEnum'
+import getElem from '../../helper/getElemFromRef'
 
 // Style
 import './NewActivity.css'
@@ -43,14 +44,19 @@ export default function NewAcitivty({ calendarContainerRef }: Props) {
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const descRef = useRef<HTMLTextAreaElement>(null)
     const newActivityContainerRef = useRef<HTMLDivElement>(null)
+    const calendarIconRef = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
         function hideCalendar(e: MouseEvent) {
-            if (e.target === calendarContainerElem) calendarContainerElem.style.removeProperty('display')
+            const calendarContainerElem = getElem(calendarContainerRef)
+            if (toggleCalendar && !calendarContainerElem.contains(e.target as Node)) {
+                calendarContainerElem.style.removeProperty('display')
+                setToggleCalendar(currToggleCalendar => !currToggleCalendar)
+            }
         }
         window.addEventListener('click', hideCalendar)
         return () => { window.removeEventListener('click', hideCalendar) }
-    }, [])
+    }, [toggleCalendar])
 
     const { lightColor, darkColor, borderColor } = activityProps
 
@@ -74,15 +80,13 @@ export default function NewAcitivty({ calendarContainerRef }: Props) {
     }
 
     function handleCalendarClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-        if (calendarContainerRef.current === null) throw Error('calendarContainerRef is null')
-        const calendarContainerElem = calendarContainerRef.current
+        e.stopPropagation()
+        const calendarContainerElem = getElem(calendarContainerRef)
 
         if (toggleCalendar) {
             calendarContainerElem.style.removeProperty('display')
         } else {
-            if (newActivityContainerRef.current === null) throw Error('newActivityContainerRef is null')
-
-            const newActivityContainerElem = newActivityContainerRef.current
+            const newActivityContainerElem = getElem(newActivityContainerRef)
             const newActivityContainerRect = newActivityContainerElem.getBoundingClientRect()
             const { top, left, height } = newActivityContainerRect
 
@@ -120,6 +124,7 @@ export default function NewAcitivty({ calendarContainerRef }: Props) {
             <div>
                 <button
                     className='material-symbols-outlined'
+                    ref={calendarIconRef}
                     onClick={handleCalendarClick}
                 >edit_calendar</button>
                 <span>{formattedDate}</span>

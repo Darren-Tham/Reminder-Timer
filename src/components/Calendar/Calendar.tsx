@@ -13,8 +13,14 @@ interface State {
 
 /**
  * Types of action to perform on the Date.
+ *
+ * next - set date to the next month.
+ *
+ * back - set date to the previous month.
+ *
+ * current - set date to the current date.
  */
-type Action = { type: 'next' | 'back' }
+type Action = { type: 'next' | 'back' | 'current' }
 
 /**
  * Reducer function for useReducer to change
@@ -26,18 +32,16 @@ type Action = { type: 'next' | 'back' }
  * @throws an Error for unsupported action types
  */
 function reducer(state: State, action: Action): State {
-    const newDate = new Date(state.date)
+    const currDateObj = state.date
+    const currYear = currDateObj.getFullYear()
+    const currMonth = currDateObj.getMonth()
+    const currDate = currDateObj.getDate()
     switch (action.type) {
-        case 'next':
-            newDate.setMonth(newDate.getMonth() + 1)
-            break
-        case 'back':
-            newDate.setMonth(newDate.getMonth() - 1)
-            break
-        default:
-            throw Error('Unsupported Action')
+        case 'next': return { date: new Date(currYear, currMonth + 1, currDate) }
+        case 'back': return { date: new Date(currYear, currMonth - 1, currDate )}
+        case 'current': return { date: new Date(Date.now()) }
+        default: throw Error('Unsupported Action')
     }
-    return { date: newDate }
 }
 
 /**
