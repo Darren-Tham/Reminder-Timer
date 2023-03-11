@@ -2,6 +2,8 @@
     --container-width: 400px;
     width: var(--container-width);
     background-color: #222227;
+    display: none;
+    position: absolute;
 }
 
 /* Header */

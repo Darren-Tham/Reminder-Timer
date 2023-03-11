@@ -22,16 +22,25 @@ const taskProps: ActivityProps = {
 }
 
 /**
+ * Props passed to the NewActivity component.
+ */
+interface Props {
+    calendarContainerRef: React.MutableRefObject<HTMLDivElement | null>
+}
+
+/**
  * React component that creates
  * a new activity for the list.
  *
  * @returns NewActivity component
  */
-export default function NewAcitivty() {
+export default function NewAcitivty({ calendarContainerRef }: Props) {
     const [activityProps, setActivityProps] = useState(taskProps)
     const [date, setDate] = useState(new Date(Date.now()))
+    const [toggleCalendar, setToggleCalendar] = useState(false)
     const titleRef = useRef<HTMLTextAreaElement>(null)
     const descRef = useRef<HTMLTextAreaElement>(null)
+    const newActivityContainerRef = useRef<HTMLDivElement>(null)
 
     const { lightColor, darkColor, borderColor } = activityProps
 
@@ -54,9 +63,31 @@ export default function NewAcitivty() {
         textarea.style.height = `${textarea.scrollHeight}px`
     }
 
+    function handleCalendarClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+        if (calendarContainerRef.current === null) throw Error('calendarContainerRef is null')
+        const calendarContainerElem = calendarContainerRef.current
+
+        if (toggleCalendar) {
+            calendarContainerElem.style.removeProperty('display')
+        } else {
+            if (newActivityContainerRef.current === null) throw Error('newActivityContainerRef is null')
+
+            const newActivityContainerElem = newActivityContainerRef.current
+            const newActivityContainerRect = newActivityContainerElem.getBoundingClientRect()
+            const { top, left, height } = newActivityContainerRect
+
+            calendarContainerElem.style.top = `${top + height}px`
+            calendarContainerElem.style.left = `${left}px`
+            calendarContainerElem.style.display = 'block'
+        }
+
+        setToggleCalendar(currToggleCalendar => !currToggleCalendar)
+    }
+
     return (
         <div
             className='new-activity-container'
+            ref={newActivityContainerRef}
             style={{
                 background: `linear-gradient(to right bottom, ${lightColor} 50%, ${darkColor})`,
                 borderColor
@@ -77,7 +108,10 @@ export default function NewAcitivty() {
             />
             <hr />
             <div>
-                <button className='material-symbols-outlined'>edit_calendar</button>
+                <button
+                    className='material-symbols-outlined'
+                    onClick={handleCalendarClick}
+                >edit_calendar</button>
                 <span>{formattedDate}</span>
             </div>
         </div>

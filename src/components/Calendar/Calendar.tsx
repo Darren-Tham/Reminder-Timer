@@ -1,5 +1,5 @@
 // React
-import { useReducer } from 'react'
+import { useReducer, forwardRef } from 'react'
 
 // Style
 import './Calendar.css'
@@ -35,7 +35,7 @@ function reducer(state: State, action: Action): State {
             newDate.setMonth(newDate.getMonth() - 1)
             break
         default:
-            throw 'Unsupported Action'
+            throw Error('Unsupported Action')
     }
     return { date: newDate }
 }
@@ -44,10 +44,14 @@ function reducer(state: State, action: Action): State {
  * React component for
  * the calendar popup.
  *
+ * The component forwards the calendar container to the
+ * parent component to be used in the NewActivity component.
+ *
+ * @param props Calendar props
+ * @param ref ref object passed by the parent
  * @returns Calendar component
  */
-export default function Calendar() {
-    // const [date, setDate] = useState(new Date(Date.now()))
+export default forwardRef(function Calendar(_, ref: React.ForwardedRef<HTMLDivElement>) {
     const [state, dispatch] = useReducer(reducer, { date: new Date(Date.now()) })
     const { date } = state
     const options: Intl.DateTimeFormatOptions = {
@@ -57,7 +61,6 @@ export default function Calendar() {
     const parts = new Intl.DateTimeFormat('en-US', options).formatToParts(date)
     const currMonth = parts[0].value
     const currYear = parts[2].value
-
 
     /**
      * Renders the 7 days of the week.
@@ -96,7 +99,7 @@ export default function Calendar() {
                     const td = (
                         <td
                             key={`${temp.getMonth()}-${temp.getDate()}`}
-                            className={dateEquals(temp, date) ? 'calendar-curr-date' : undefined}
+                            className={dateEquals(temp, date) ? 'calendar-curr-date' : ''}
                             // Dim dates on previous and next months
                             style={temp.getMonth() == currMonth ? undefined : { opacity: 0.5 }}
                         >{temp.getDate()}</td>
@@ -109,7 +112,10 @@ export default function Calendar() {
     }
 
     return (
-        <div className='calendar-container'>
+        <div
+            className='calendar-container'
+            ref={ref}
+        >
             <div>
                 <button
                     className='material-symbols-outlined'
@@ -134,7 +140,7 @@ export default function Calendar() {
             </table>
         </div>
     )
-}
+})
 
 /**
  * Returns true if two dates are equal.

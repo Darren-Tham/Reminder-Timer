@@ -17,4 +17,5 @@ button {
     cursor: pointer;
     background-color: transparent;
     padding: 0;
+    outline: none;
 }
